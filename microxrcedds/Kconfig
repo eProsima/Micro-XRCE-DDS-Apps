@@ -54,7 +54,7 @@ endif # UXR_PROFILE_SERIAL_TRANSPORT
 
 config UXR_PROFILE_UDP_TRANSPORT 
         bool "UDP Transport profile"
-        default n 
+        default y 
         depends on NET_UDP
         ---help---
             Enable the UDP Transport profile.
@@ -63,7 +63,7 @@ if UXR_PROFILE_UDP_TRANSPORT
 
 config UXR_UDP_TRANSPORT_MTU
         int "UDP Transport MTU"
-        default 512
+        default 64 
         ---help---
             UDP Transport MTU.
 
@@ -71,7 +71,7 @@ endif # UXR_PROFILE_UDP_TRANSPORT
 
 config UXR_PROFILE_TCP_TRANSPORT 
         bool "TCP Transport profile"
-        default n
+        default y
         depends on NET_TCP
         ---help---
             Enable the TCP Transport profile.
@@ -80,7 +80,7 @@ if UXR_PROFILE_TCP_TRANSPORT
 
 config UXR_TCP_TRANSPORT_MTU
         int "TCP Transport MTU"
-        default 512
+        default 64 
         ---help---
             TCP Transport MTU.
 
