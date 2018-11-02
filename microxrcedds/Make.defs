@@ -1,0 +1,3 @@
+ifeq ($(CONFIG_MICRO_XRCE_CLIENT),y)
+CONFIGURED_APPS += microxrcedds
+endif
