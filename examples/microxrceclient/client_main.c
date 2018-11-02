@@ -39,8 +39,9 @@
 #define RED_CONSOLE_COLOR   "\x1B[1;31m"
 #define RESTORE_COLOR       "\x1B[0m"
 
-// Getting the max MTU
-#define MAX_TRANSPORT_MTU UXR_CONFIG_SERIAL_TRANSPORT_MTU
+// Getting the max MTU at compile time.
+#define MAX_UDP_TCP_MTU ((UXR_CONFIG_UDP_TRANSPORT_MTU > UXR_CONFIG_TCP_TRANSPORT_MTU) ? UXR_CONFIG_UDP_TRANSPORT_MTU : UXR_CONFIG_UDP_TRANSPORT_MTU)
+#define MAX_TRANSPORT_MTU ((UXR_CONFIG_SERIAL_TRANSPORT_MTU > MAX_UDP_TCP_MTU) ? UXR_CONFIG_SERIAL_TRANSPORT_MTU : MAX_UDP_TCP_MTU)
 
 // Stream buffers
 #define MAX_HISTORY        2
@@ -70,12 +71,45 @@ int client_main(int args, char *argv[])
 #endif
 {
     uxrSession session;
+
+    uxrUDPTransport udp;
+    uxrUDPPlatform udp_platform;
+    uxrTCPTransport tcp;
+    uxrTCPPlatform tcp_platform;
     uxrSerialTransport serial;
     uxrSerialPlatform serial_platform;
 
     uxrCommunication* comm;
 
-    if (args >= 3 && strcmp(argv[1], "--serial") == 0)
+    int args_index = 0;
+
+    if (args >= 4 && strcmp(argv[1], "--udp") == 0)
+    {
+        char* ip = argv[2];
+        uint16_t port = (uint16_t)atoi(argv[3]);
+        if(!uxr_init_udp_transport(&udp, &udp_platform, ip, port))
+        {
+            printf("%sCan not create an udp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
+            return 1;
+        }
+        comm = &udp.comm;
+        printf("UDP mode => ip: %s - port: %hu\n", argv[2], port);
+        args_index = 4;
+    }
+    else if(args >= 4 && strcmp(argv[1], "--tcp") == 0)
+    {
+        char* ip = argv[2];
+        uint16_t port = (uint16_t)atoi(argv[3]);
+        if(!uxr_init_tcp_transport(&tcp, &tcp_platform, ip, port))
+        {
+            printf("%sCan not create a tcp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
+            return 1;
+        }
+        comm = &tcp.comm;
+        printf("<< TCP mode => ip: %s - port: %hu >>\n", argv[2], port);
+        args_index = 4;
+    }
+    else if (args >= 3 && strcmp(argv[1], "--serial") == 0)
     {
         char* device = argv[2];
         int fd = open(device, O_RDWR | O_NOCTTY);
@@ -132,8 +166,8 @@ int client_main(int args, char *argv[])
             }
             comm = &serial.comm;
             printf("Serial mode => dev: %s\n", device);
+            args_index = 3;
         }
-
     }
     else
     {
@@ -144,7 +178,34 @@ int client_main(int args, char *argv[])
     printf("Running Shapes Demo Client...\n");
 
     uint32_t key = 0xAABBCCDD;
+    if(args_index < args && 0 == strcmp(argv[args_index++], "--key"))
+    {
+        if(args_index < args)
+        {
+            key = atoi(argv[args_index++]);
+        }
+        else
+        {
+            print_help();
+        }
+    }
+
     uint16_t history = 2;
+    if(args_index < args && 0 == strcmp(argv[args_index++], "--history"))
+    {
+        if(args_index < args)
+        {
+            size_t request_history = atoi(argv[args_index++]);
+            if(MAX_HISTORY >= request_history)
+            {
+                history = (uint16_t)request_history;
+            }
+        }
+        else
+        {
+            print_help();
+        }
+    }
 
     // Init session and streams
     uxr_init_session(&session, comm, key);
@@ -189,22 +250,18 @@ int client_main(int args, char *argv[])
         }
     }
 
-//    if(&udp.comm == comm)
-//    {
-//        uxr_close_udp_transport(&udp);
-//    }
-//    else if(&tcp.comm == comm)
-//    {
-//        uxr_close_tcp_transport(&tcp);
-//    }
-//#if !defined(WIN32)
-//    else if(&serial.comm == comm)
-//    {
-//        uxr_close_serial_transport(&serial);
-//    }
-//#endif
-
-    uxr_close_serial_transport(&serial);
+    if(&udp.comm == comm)
+    {
+        uxr_close_udp_transport(&udp);
+    }
+    else if(&tcp.comm == comm)
+    {
+        uxr_close_tcp_transport(&tcp);
+    }
+    else if(&serial.comm == comm)
+    {
+        uxr_close_serial_transport(&serial);
+    }
 
     return 0;
 }
