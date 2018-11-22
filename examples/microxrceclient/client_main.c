@@ -79,7 +79,7 @@ int client_main(int args, char *argv[])
     uxrSerialTransport serial;
     uxrSerialPlatform serial_platform;
 
-    uxrCommunication* comm;
+    uxrCommunication* comm = NULL;
 
     int args_index = 0;
 
@@ -556,7 +556,7 @@ void print_commands(void)
 int check_input(void)
 {
     struct timeval tv = {0, 0};
-    fd_set fds = {0};
+    fd_set fds = {{0}};
     FD_ZERO(&fds);
     FD_SET(0, &fds); //STDIN 0
     select(1, &fds, NULL, NULL, &tv);
