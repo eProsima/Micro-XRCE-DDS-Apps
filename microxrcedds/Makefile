@@ -88,7 +88,7 @@ all: .built
 	$(Q) cd $(MICRO_XRCE_DIR)/build/extracted; \
 		$(ARCROSSDEV)ar -x $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a; \
 		$(ARCROSSDEV)ar -x $(MICRO_XRCE_INSTALL_DIR)/lib/libmicrocdr.a;
-	$(Q) $(AR) $(BIN) $(MICRO_XRCE_DIR)/build/extracted/*.o
+	$(Q) $(AR) $(BIN) $(MICRO_XRCE_DIR)/build/extracted/*.obj
 	$(Q) touch .built
 
 cmakecompile: $(MICRO_XRCE_DIR) $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a
@@ -122,7 +122,7 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
          echo 'CONFIG_SERIALIZATION_ENDIANNESS=$(CONFIG_SERIALIZATION_ENDIANNESS)' >> $(MICRO_XRCE_DIR)/client.config
 	$(Q) mkdir -p $(MICRO_XRCE_DIR)/build
 	$(Q) cd $(MICRO_XRCE_DIR)/build; \
-		 cmake -DCMAKE_TOOLCHAIN_FILE=$(MICRO_XRCE_DIR)/../toolchain.cmake \
+		 cmake -DCMAKE_TOOLCHAIN_FILE=$(MICRO_XRCE_DIR)/toolchains/nuttx_toolchain.cmake \
 			-DCMAKE_SYSROOT=$(TOPDIR) \
 			-DCROSSDEV=$(CROSSDEV) \
 			-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
