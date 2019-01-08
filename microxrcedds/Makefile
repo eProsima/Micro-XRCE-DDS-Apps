@@ -94,8 +94,11 @@ all: .built
 cmakecompile: $(MICRO_XRCE_DIR) $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a
 
 $(MICRO_XRCE_DIR):
-	@echo "Cloning eProsima/Micro-XRCE-DDS-Client"	
-	$(Q) git clone --branch $(CONFIG_UXR_BRANCH) --recursive https://github.com/eProsima/Micro-XRCE-DDS-Client
+	@echo "Cloning eProsima/Micro-XRCE-DDS-Client"
+	$(Q) git clone -c remote.origin.fetch='+refs/pull/*:refs/remotes/origin/pull/*' --recursive https://github.com/eProsima/Micro-XRCE-DDS-Client && \
+		cd Micro-XRCE-DDS-Client && \
+		git fetch && \
+		git checkout $(CONFIG_UXR_BRANCH) 
 
 $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a: $(MICRO_XRCE_DIR)/build/CMakeCache.txt
 	$(Q) cd $(MICRO_XRCE_DIR)/build; \
