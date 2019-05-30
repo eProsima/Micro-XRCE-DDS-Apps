@@ -102,7 +102,7 @@ $(MICRO_XRCE_DIR):
 
 $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a: $(MICRO_XRCE_DIR)/build/CMakeCache.txt
 	$(Q) cd $(MICRO_XRCE_DIR)/build; \
-		 make install
+		 make && make install
 
 $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
 	$(Q) echo 'PROFILE_CREATE_ENTITIES_REF=$(PROFILE_CREATE_ENTITIES_REF)' > $(MICRO_XRCE_DIR)/client.config; \
