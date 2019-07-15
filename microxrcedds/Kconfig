@@ -42,6 +42,12 @@ config UXR_PROFILE_SERIAL_TRANSPORT
         ---help---
             Enable the Serial Transport profile.
 
+config UXR_PROFILE_DISCOVERY
+        bool "Discovery profile"
+        default y
+        ---help---
+            Enable the Discovery profile.
+
 if UXR_PROFILE_SERIAL_TRANSPORT
 
 config UXR_SERIAL_TRANSPORT_MTU

@@ -64,6 +64,13 @@ else
 	PROFILE_TCP_TRANSPORT = FALSE
 endif
 
+# Discovery profile flag
+ifeq ($(CONFIG_UXR_PROFILE_DISCOVERY),y)
+	PROFILE_DISCOVERY = TRUE
+else
+	PROFILE_DISCOVERY = FALSE
+endif
+
 # Serialization endianness flag
 ifeq ($(CONFIG_ENDIAN_BIG),y)
 	CONFIG_SERIALIZATION_ENDIANNESS = 1
@@ -112,6 +119,7 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
          echo 'PROFILE_SERIAL_TRANSPORT=$(PROFILE_SERIAL_TRANSPORT)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'PROFILE_UDP_TRANSPORT=$(PROFILE_UDP_TRANSPORT)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'PROFILE_TCP_TRANSPORT=$(PROFILE_TCP_TRANSPORT)' >> $(MICRO_XRCE_DIR)/client.config; \
+         echo 'PROFILE_DISCOVERY=$(PROFILE_DISCOVERY)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_SERIAL_TRANSPORT_MTU=$(CONFIG_UXR_SERIAL_TRANSPORT_MTU)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_UDP_TRANSPORT_MTU=$(CONFIG_UXR_UDP_TRANSPORT_MTU)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_TCP_TRANSPORT_MTU=$(CONFIG_UXR_TCP_TRANSPORT_MTU)' >> $(MICRO_XRCE_DIR)/client.config; \
