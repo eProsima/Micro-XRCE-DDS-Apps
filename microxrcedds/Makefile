@@ -131,6 +131,7 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
          echo 'CONFIG_MIN_SESSION_CONNECTION_INTERVAL=$(CONFIG_UXR_MIN_SESSION_CONNECTION_INTERVAL)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_MIN_HEARTBEAT_TIME_INTERVAL=$(CONFIG_UXR_MIN_HEARTBEAT_TIME_INTERVAL)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_SERIALIZATION_ENDIANNESS=$(CONFIG_SERIALIZATION_ENDIANNESS)' >> $(MICRO_XRCE_DIR)/client.config
+		 echo 'UCLIENT_ISOLATED_INSTALL=OFF' >> $(MICRO_XRCE_DIR)/client.config
 	$(Q) mkdir -p $(MICRO_XRCE_DIR)/toolchains/build
 	$(Q) cd $(MICRO_XRCE_DIR)/toolchains/build; \
 		cmake .. -DCROSSDEV=$(CROSSDEV) \
