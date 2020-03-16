@@ -16,7 +16,7 @@ config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PROGNAME
 	default "microxrceclient_6lowpan"
 	depends on BUILD_LOADABLE
 	---help---
-		This is a example which create a Micro-XRCE-DDS 6lowpan publisher that works with the MRF24J40 radio over 6LOWPAN protocol
+		This is an example which creates a Micro XRCE-DDS 6LoWPAN publisher that works with the MRF24J40 radio over 6LoWPAN protocol
 
 config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PRIORITY
 	int "Micro XRCE-DDS Client 6LoWPAN task priority"
