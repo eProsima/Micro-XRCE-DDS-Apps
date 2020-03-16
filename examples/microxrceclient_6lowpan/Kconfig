@@ -7,7 +7,7 @@ config EXAMPLES_MICROXRCECLIENT_6LOWPAN
 	tristate "Micro-XRCE-DDS Client 6lowpan example"
 	default n
 	---help---
-		Enable Micro-XRCE-DDS 6lowpan Client example
+		Enable Micro XRCE-DDS 6LoWPAN Client example
 
 if EXAMPLES_MICROXRCECLIENT_6LOWPAN
 
