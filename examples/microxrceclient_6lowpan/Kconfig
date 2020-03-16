@@ -23,7 +23,7 @@ config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PRIORITY
 	default 100
 
 config EXAMPLES_MICROXRCECLIENT_6LOWPAN_STACKSIZE
-	int "Micro-XRCE-DDS Client 6lowpan stack size"
+	int "Micro XRCE-DDS Client 6LoWPAN stack size"
 	default 4096
 
 endif
