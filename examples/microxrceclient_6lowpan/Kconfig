@@ -19,7 +19,7 @@ config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PROGNAME
 		This is a example which create a Micro-XRCE-DDS 6lowpan publisher that works with the MRF24J40 radio over 6LOWPAN protocol
 
 config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PRIORITY
-	int "Micro-XRCE-DDS Client 6lowpan task priority"
+	int "Micro XRCE-DDS Client 6LoWPAN task priority"
 	default 100
 
 config EXAMPLES_MICROXRCECLIENT_6LOWPAN_STACKSIZE
