@@ -1,0 +1,4 @@
+zephyrproject/
+zephyr-sdk/
+build/
+zephyr-toolchain*
