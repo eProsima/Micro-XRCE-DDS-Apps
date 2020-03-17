@@ -1,0 +1,4 @@
+[submodule "Micro-XRCE-DDS-Client"]
+	path = Micro-XRCE-DDS-Client
+	url = https://github.com/eProsima/Micro-XRCE-DDS-Client
+	branch = dashing
