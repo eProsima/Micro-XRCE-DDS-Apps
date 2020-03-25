@@ -151,11 +151,11 @@ Middlewares/Third_Party/LwIP/src/core/ipv6/ethip6.c \
 Middlewares/Third_Party/LwIP/src/core/ipv6/inet6.c \
 Middlewares/Third_Party/LwIP/system/OS/sys_arch.c \
 Middlewares/Third_Party/LwIP/src/apps/mqtt/mqtt.c \
-FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_utils.c \
-FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_clock.c \
-FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_sched.c \
-FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_unistd.c \
-FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_pthread.c \
+Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_utils.c \
+Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_clock.c \
+Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_sched.c \
+Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_unistd.c \
+Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/source/FreeRTOS_POSIX_pthread.c \
 Src/custom_memory_manager.c \
 Src/libatomic.c \
 Src/allocators.c \
@@ -243,38 +243,28 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/LwIP/src/include/posix \
 -IMiddlewares/Third_Party/LwIP/src/include/posix/sys \
 -IMiddlewares/Third_Party/LwIP/system/arch \
--IFreeRTOS-Plus-POSIX/include \
--IFreeRTOS-Plus-POSIX/include/portable/empty_portable \
--IFreeRTOS-Plus-POSIX/include/portable \
--Iinclude \
--Iinclude/private
 
-C_INCLUDES += -I$(PROJECTFOLDER)/include
-C_INCLUDES += -I$(PROJECTFOLDER)/include/FreeRTOS_POSIX
-C_INCLUDES += -I$(PROJECTFOLDER)/include/private
-C_INCLUDES += -I$(PROJECTFOLDER)/FreeRTOS-Plus-POSIX/include
-C_INCLUDES += -I$(PROJECTFOLDER)/FreeRTOS-Plus-POSIX/include/portable
-C_INCLUDES += -I$(PROJECTFOLDER)/FreeRTOS-Plus-POSIX/include/portable/crazyflie
-C_INCLUDES += -I$(PROJECTFOLDER)/src/lib/FreeRTOS/include
 C_INCLUDES += -I$(PROJECTFOLDER)/micro_xrce_dds_install/include
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/private
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/st/stm32l475_discovery
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include
 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/FreeRTOS-Plus-POSIX/include 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/include 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/include/private 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/include/FreeRTOS_POSIX 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/include/FreeRTOS_POSIX/sys
-UXRCE_INCLUDES += $(PROJECTFOLDER)/src/hal/interface 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/src/modules/interface 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/src/utils/interface 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/src/config 
-UXRCE_INCLUDES += $(PROJECTFOLDER)/src/drivers/interface
+
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/LwIP/src/include/posix
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/LwIP/src/include
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Inc
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Drivers/STM32F4xx_HAL_Driver/Inc
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Drivers/CMSIS/Device/ST/STM32F4xx/Include
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Drivers/CMSIS/Include
+UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX
+UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/private
+UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include
+UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/LwIP/system
+# UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/LwIP/system
 UXRCE_INCLUDES_STR := $(foreach x,$(UXRCE_INCLUDES),$(x)\n)
 
 # compile gcc flags

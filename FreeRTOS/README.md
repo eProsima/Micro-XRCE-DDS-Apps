@@ -52,6 +52,18 @@ Update Micro XRCE-DDS submodule:
 git submodule init
 git submodule update
 ```
+cd FreeRTOS
+touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
+
+```
+
+```
+
+touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/timeval.h
+
+
+
+
 
 Build Micro-XRCE-DDS-Client library:
 
