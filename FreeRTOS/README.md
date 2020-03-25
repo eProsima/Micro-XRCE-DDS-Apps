@@ -54,6 +54,7 @@ git submodule update
 ```
 cd FreeRTOS
 touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
+code Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
 
 ```
 #ifndef _FREERTOS_POSIX_SYSTIME_H_
@@ -70,8 +71,13 @@ struct timeval {
 
 touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/timeval.h
 
+code Inc/FreeRTOSConfig.h
+add
+#define configUSE_POSIX_ERRNO 1 
+#define INCLUDE_xTaskGetHandle 1 
 
 #include <main.h> in /workspaces/Micro-XRCE-DDS-Apps/FreeRTOS/Inc/FreeRTOSConfig.h
+
 
 
 

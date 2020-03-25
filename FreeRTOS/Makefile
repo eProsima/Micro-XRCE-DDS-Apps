@@ -237,14 +237,24 @@ C_INCLUDES =  \
 -IMiddlewares/Third_Party/LwIP/src/include/posix/sys \
 -IMiddlewares/Third_Party/LwIP/system/arch
 
-C_INCLUDES += -I$(PROJECTFOLDER)/micro_xrce_dds_install/include
-C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX
-C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include
-C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/private
-C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/st/stm32l475_discovery
-C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/
+
 C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/private
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable
+C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/st/stm32l475_discovery
+C_INCLUDES += -I$(PROJECTFOLDER)/micro_xrce_dds_install/include
 C_INCLUDES += -I$(PROJECTFOLDER)
+
+# C_INCLUDES += -I$(PROJECTFOLDER)/micro_xrce_dds_install/include
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include/private
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/st/stm32l475_discovery
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/FreeRTOS-Plus-POSIX/include/portable/
+# C_INCLUDES += -I$(PROJECTFOLDER)/Middlewares/Third_Party/FreeRTOS_POSIX/include
+# C_INCLUDES += -I$(PROJECTFOLDER)
 
 
 UXRCE_INCLUDES += $(PROJECTFOLDER)/Middlewares/Third_Party/LwIP/src/include/posix
