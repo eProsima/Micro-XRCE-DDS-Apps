@@ -33,7 +33,7 @@ Most of these peripherals are mapped into Olimex board headers. The BSP and peri
 
 ## Building
 
-Install some dependecies and the ARM compiler:
+Install some dependencies and the ARM compiler:
 
 ```bash
 sudo apt update
