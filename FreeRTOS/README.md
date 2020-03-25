@@ -37,7 +37,7 @@ Install some dependecies and the ARM compiler:
 
 ```
 sudo apt update
-sudo apt install build-essential cmake git openocd gcc-arm-none-eabi
+sudo apt install build-essential cmake git openocd gcc-arm-none-eabi usbutils
 ```
 
 Clone this repository:
@@ -56,11 +56,22 @@ cd FreeRTOS
 touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
 
 ```
+#ifndef _FREERTOS_POSIX_SYSTIME_H_
+#define _FREERTOS_POSIX_SYSTIME_H_
+
+struct timeval {
+  long    tv_sec;         /* seconds */
+  long    tv_usec;        /* and microseconds */
+};
+
+#endif /* ifndef _FREERTOS_POSIX_SYSTIME_H_ */
 
 ```
 
 touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/timeval.h
 
+
+#include <main.h> in /workspaces/Micro-XRCE-DDS-Apps/FreeRTOS/Inc/FreeRTOSConfig.h
 
 
 
@@ -81,5 +92,5 @@ make UXRCEDDS_AGENT_IP=[Agent IP] UXRCEDDS_AGENT_PORT=[Agent Port]
 Flash the Olimex board using the JTAG adapter:
 
 ```bash
-openocd -f interface/ftdi/olimex-arm-usb-tiny-h.cfg -f target/stm32f4x.cfg -c init -c "reset halt" -c "flash write_image erase build/microxrceddsapp.bin 0x08000000" -c "reset" -c "exit"
+openocd -f interface/ftdi/olimex-arm-usb-tiny-h.cfg -f target/stm32f4x.cfg -c init -c "reset halt" -c "flash write_image erase build/sample_project.bin 0x08000000" -c "reset" -c "exit"
 ```

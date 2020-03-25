@@ -25,18 +25,9 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include <stdbool.h>
-
-#include "stm32f4xx_hal.h"
-#include "api.h"
-
-#include <sys/socket.h>
-#include <ip_addr.h>
-
-#include "FreeRTOS.h"
-#include "task.h"
-
-
+#include "FreeRTOS.h" 
+#include "task.h" 
+#include "app.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -81,33 +72,12 @@ static void MX_USART6_UART_Init(void);
 void initTaskFunction(void *argument);
 
 /* USER CODE BEGIN PFP */
-#define BUFSIZE 4096
-char buffer[BUFSIZE];
-extern struct netif gnetif;
-// extern appMain;
-
+extern struct netif gnetif; 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-int __io_putchar(int ch)
-{
-  uint8_t c[1];
-  c[0] = ch & 0x00FF;
-  if (&huart3 != NULL){
-     HAL_UART_Transmit(&huart3, &c[0], 1, 10);
-  }
-  return ch;
-}
 
-int _write(int file,char *ptr, int len)
-{
-  int DataIdx;
-  for(DataIdx= 0; DataIdx< len; DataIdx++){
-  __io_putchar(*ptr++);
-  }
-  return len;
-}
 /* USER CODE END 0 */
 
 /**
@@ -390,6 +360,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 /* USER CODE END 4 */
 
 /* USER CODE BEGIN Header_initTaskFunction */
@@ -403,7 +374,7 @@ void initTaskFunction(void *argument)
 {
   /* USER CODE BEGIN 5 */
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_6, GPIO_PIN_SET);
-  bool availableNetwork = false;
+  uint8_t availableNetwork = 0;
 
   printf("Ethernet Initialization\r\n");
 
@@ -415,8 +386,8 @@ void initTaskFunction(void *argument)
     retries++;
   };
 
-  availableNetwork = (gnetif.ip_addr.addr != 0);
-  if (availableNetwork){
+  availableNetwork = (gnetif.ip_addr.addr != 0) ? 1 : 0;
+  if (availableNetwork != 0){
     printf("IP: %s\r\n",ip4addr_ntoa(&gnetif.ip_addr));
   }else{
     printf("Impossible to retrieve an IP\n");
@@ -431,21 +402,12 @@ void initTaskFunction(void *argument)
   attributes.priority = (osPriority_t) osPriorityNormal1;
   osThreadNew(appMain, NULL, &attributes);
 
-  osDelay(500);
-  char ptrTaskList[500];
-  vTaskList(ptrTaskList);
-  printf("**********************************\n");
-  printf("Task  State   Prio    Stack    Num\n"); 
-  printf("**********************************\n");
-  printf(ptrTaskList);
-  printf("**********************************\n");
-
   TaskHandle_t xHandle;
   xHandle = xTaskGetHandle("microxrceddsapp");
 
   while (1){
-    availableNetwork = (gnetif.ip_addr.addr != 0);
-    if (eTaskGetState(xHandle) != eSuspended && availableNetwork){
+    availableNetwork = (gnetif.ip_addr.addr != 0) ? 1 : 0;
+    if (eTaskGetState(xHandle) != eSuspended && availableNetwork != 0){
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_RESET);
       osDelay(100);
       HAL_GPIO_WritePin(GPIOC, GPIO_PIN_13, GPIO_PIN_SET);

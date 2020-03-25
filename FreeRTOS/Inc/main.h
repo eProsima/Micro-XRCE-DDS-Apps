@@ -32,9 +32,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-#include "app.h"
 
-#include "sys/time.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -60,6 +58,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define configUSE_POSIX_ERRNO 1
+#define INCLUDE_xTaskGetHandle 1
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
