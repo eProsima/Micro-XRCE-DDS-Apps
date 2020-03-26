@@ -30,8 +30,7 @@ Olimex STM32-E407 features a STM32F407 Cortex-M4 microcontroller. It has 1MB Fla
 Most of these peripherals are mapped into Olimex board headers. The FreeRTOS BSP of this evaluation board relies on a [STM32CubeMX](https://www.st.com/en/development-tools/stm32cubemx.html) generated project, so HAL and low-level configuration can be tuned to specific requirements. The out-of-the-box HAL configuration included in the port packages configures the minimal communication and debugging peripheral required for Micro XRCE-DDS.
 
 
-
-## Building
+## Prepare the environment
 
 Install some dependecies and the ARM compiler:
 
@@ -52,9 +51,18 @@ Update Micro XRCE-DDS submodule:
 git submodule init
 git submodule update
 ```
+
+Install STM32CubeMX from ST webpage: [download here](https://www.st.com/en/development-tools/stm32cubemx.html).
+
+Create required POSIX files:
+
+```bash
 cd FreeRTOS
 touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
-code Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h
+touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/timeval.h # This file can be empty
+```
+
+The content of `FreeRTOS/Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/time.h` should be:
 
 ```
 #ifndef _FREERTOS_POSIX_SYSTIME_H_
@@ -69,27 +77,32 @@ struct timeval {
 
 ```
 
-touch Middlewares/Third_Party/FreeRTOS_POSIX/include/FreeRTOS_POSIX/sys/timeval.h
+In `FreeRTOS/Inc/FreeRTOSConfig.h` add these two lines in the `USER CODE` section (line 45):
 
-code Inc/FreeRTOSConfig.h
-add
-#define configUSE_POSIX_ERRNO 1 
-#define INCLUDE_xTaskGetHandle 1 
+```c
+/* USER CODE BEGIN Includes */   	      
+/* Section where include file can be added */
+#define configUSE_POSIX_ERRNO 1
+#define INCLUDE_xTaskGetHandle 1
+/* USER CODE END Includes */ 
+```
 
-#include <main.h> in /workspaces/Micro-XRCE-DDS-Apps/FreeRTOS/Inc/FreeRTOSConfig.h
 
+Overwrite `main.c`. This file add the Micro XRCE-DDS task initialization, you can analyze it at line 373:
 
+```bash
+cp -rf main_template.c Src/main.c
+```
 
-
+## Building
 
 Build Micro-XRCE-DDS-Client library:
 
 ```bash
-cd FreeRTOS
 make libmicroxrcedds
 ```
 
-Set the Micro XRCE-DDS Agent address and build the firmware:
+Set the Micro XRCE-DDS Agent IP address and build the firmware:
 
 ```bash
 make UXRCEDDS_AGENT_IP=[Agent IP] UXRCEDDS_AGENT_PORT=[Agent Port]
