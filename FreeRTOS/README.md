@@ -52,9 +52,11 @@ git submodule init
 git submodule update
 ```
 
-Install STM32CubeMX from ST webpage: [download here](https://www.st.com/en/development-tools/stm32cubemx.html).
+Install STM32CubeMX from ST webpage: [download here](https://www.st.com/en/development-tools/stm32cubemx.html). 
 
-Create required POSIX files:
+Inside STM32CubeMX load `FreeRTOS/sample_project.ioc` and generate code.
+
+Create some required POSIX files:
 
 ```bash
 cd FreeRTOS
@@ -74,7 +76,6 @@ struct timeval {
 };
 
 #endif /* ifndef _FREERTOS_POSIX_SYSTIME_H_ */
-
 ```
 
 In `FreeRTOS/Inc/FreeRTOSConfig.h` add these two lines in the `USER CODE` section (line 45):
