@@ -307,7 +307,7 @@ arm_toolchain: arm_toolchain.cmake.in
 
 libmicroxrcedds: arm_toolchain
 	cd $(PROJECTFOLDER)/../Micro-XRCE-DDS-Client; rm -rf build; mkdir build; cd build; \
-	cmake .. -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DUCLIENT_PIC=OFF -DUCLIENT_ISOLATED_INSTALL=OFF -DCMAKE_INSTALL_PREFIX=$(PROJECTFOLDER)/micro_xrce_dds_install -DCMAKE_TOOLCHAIN_FILE=$(PROJECTFOLDER)/arm_toolchain.cmake && make && make install;
+	cmake .. -DCMAKE_BUILD_TYPE=$(BUILD_TYPE) -DUCLIENT_PIC=OFF -DUCLIENT_BIG_ENDIANNESS=OFF -DUCLIENT_ISOLATED_INSTALL=OFF -DCMAKE_INSTALL_PREFIX=$(PROJECTFOLDER)/micro_xrce_dds_install -DCMAKE_TOOLCHAIN_FILE=$(PROJECTFOLDER)/arm_toolchain.cmake && make && make install;
 
 #######################################
 # build the application

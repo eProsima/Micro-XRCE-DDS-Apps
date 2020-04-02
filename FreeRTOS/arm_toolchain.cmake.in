@@ -37,4 +37,3 @@ include_directories(SYSTEM
 	@INCLUDES@
     )
     
-set(__BIG_ENDIAN__ 0)
