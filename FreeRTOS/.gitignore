@@ -1,0 +1,10 @@
+build/
+arm_toolchain.cmake
+micro_xrce_dds_install/
+Drivers/
+Inc/
+Src/
+Middlewares/Third_Party/FreeRTOS
+Middlewares/Third_Party/LwIP
+startup_stm32f407xx.s
+STM32F407ZGTx_FLASH.ld
