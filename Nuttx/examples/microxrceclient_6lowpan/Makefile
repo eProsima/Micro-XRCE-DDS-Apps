@@ -33,7 +33,7 @@
 #
 ############################################################################
 
--include $(TOPDIR)/Make.defs
+include $(APPDIR)/Make.defs
 
 CONFIG_EXAMPLES_MICROXRCECLIENT_6LOWPAN_PRIORITY ?= SCHED_PRIORITY_DEFAULT
 CONFIG_EXAMPLES_MICROXRCECLIENT_6LOWPAN_STACKSIZE ?= 4096
