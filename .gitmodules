@@ -5,3 +5,12 @@
 [submodule "FreeRTOS/Middlewares/Third_Party/FreeRTOS_POSIX"]
 	path = FreeRTOS/Middlewares/Third_Party/FreeRTOS_POSIX
 	url = https://github.com/FreeRTOS/Lab-Project-FreeRTOS-POSIX
+[submodule "Nuttx/nuttx"]
+	path = Nuttx/nuttx
+	url = https://bitbucket.org/nuttx/nuttx.git
+[submodule "Nuttx/apps"]
+	path = Nuttx/apps
+	url = https://bitbucket.org/nuttx/apps.git
+[submodule "Nuttx/tools"]
+	path = Nuttx/tools
+	url = https://bitbucket.org/nuttx/tools.git
