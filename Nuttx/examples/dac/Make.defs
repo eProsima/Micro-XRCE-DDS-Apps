@@ -1,3 +1,0 @@
-ifneq ($(CONFIG_EXAMPLES_DAC),)
-CONFIGURED_APPS += examples/dac
-endif
