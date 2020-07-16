@@ -1,0 +1,29 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config EXAMPLES_MICROXRCECLIENT_6LOWPAN
+	tristate "Micro XRCE-DDS Client 6LoWPAN example"
+	default n
+	---help---
+		Enable Micro XRCE-DDS 6LoWPAN Client example
+
+if EXAMPLES_MICROXRCECLIENT_6LOWPAN
+
+config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PROGNAME
+	string "Program name"
+	default "microxrceclient_6lowpan"
+	depends on BUILD_LOADABLE
+	---help---
+		This is an example which creates a Micro XRCE-DDS 6LoWPAN publisher that works with the MRF24J40 radio over 6LoWPAN protocol
+
+config EXAMPLES_MICROXRCECLIENT_6LOWPAN_PRIORITY
+	int "Micro XRCE-DDS Client 6LoWPAN task priority"
+	default 100
+
+config EXAMPLES_MICROXRCECLIENT_6LOWPAN_STACKSIZE
+	int "Micro XRCE-DDS Client 6LoWPAN stack size"
+	default 4096
+
+endif
