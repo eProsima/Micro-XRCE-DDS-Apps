@@ -40,7 +40,12 @@
 #define RESTORE_COLOR       "\x1B[0m"
 
 // Getting the max MTU at compile time.
+#if defined(PROFILE_UDP_TRANSPORT) && defined(PROFILE_TCP_TRANSPORT)
 #define MAX_UDP_TCP_MTU ((UXR_CONFIG_UDP_TRANSPORT_MTU > UXR_CONFIG_TCP_TRANSPORT_MTU) ? UXR_CONFIG_UDP_TRANSPORT_MTU : UXR_CONFIG_UDP_TRANSPORT_MTU)
+#else
+#define MAX_UDP_TCP_MTU 0
+#endif
+
 #define MAX_TRANSPORT_MTU ((UXR_CONFIG_SERIAL_TRANSPORT_MTU > MAX_UDP_TCP_MTU) ? UXR_CONFIG_SERIAL_TRANSPORT_MTU : MAX_UDP_TCP_MTU)
 
 // Stream buffers
@@ -72,44 +77,26 @@ int client_main(int args, char *argv[])
 {
     uxrSession session;
 
+#ifdef PROFILE_UDP_TRANSPORT
     uxrUDPTransport udp;
     uxrUDPPlatform udp_platform;
+#endif
+
+#ifdef PROFILE_TCP_TRANSPORT
     uxrTCPTransport tcp;
     uxrTCPPlatform tcp_platform;
+#endif
+
+#ifdef PROFILE_SERIAL_TRANSPORT
     uxrSerialTransport serial;
     uxrSerialPlatform serial_platform;
+#endif
 
     uxrCommunication* comm = NULL;
 
     int args_index = 0;
 
-    if (args >= 4 && strcmp(argv[1], "--udp") == 0)
-    {
-        char* ip = argv[2];
-        uint16_t port = (uint16_t)atoi(argv[3]);
-        if(!uxr_init_udp_transport(&udp, &udp_platform, ip, port))
-        {
-            printf("%sCan not create an udp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
-            return 1;
-        }
-        comm = &udp.comm;
-        printf("UDP mode => ip: %s - port: %hu\n", argv[2], port);
-        args_index = 4;
-    }
-    else if(args >= 4 && strcmp(argv[1], "--tcp") == 0)
-    {
-        char* ip = argv[2];
-        uint16_t port = (uint16_t)atoi(argv[3]);
-        if(!uxr_init_tcp_transport(&tcp, &tcp_platform, ip, port))
-        {
-            printf("%sCan not create a tcp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
-            return 1;
-        }
-        comm = &tcp.comm;
-        printf("<< TCP mode => ip: %s - port: %hu >>\n", argv[2], port);
-        args_index = 4;
-    }
-    else if (args >= 3 && strcmp(argv[1], "--serial") == 0)
+    if (args >= 3 && strcmp(argv[1], "--serial") == 0)
     {
         char* device = argv[2];
         int fd = open(device, O_RDWR | O_NOCTTY);
@@ -169,6 +156,36 @@ int client_main(int args, char *argv[])
             args_index = 3;
         }
     }
+#ifdef PROFILE_UDP_TRANSPORT
+    else if (args >= 4 && strcmp(argv[1], "--udp") == 0)
+    {
+        char* ip = argv[2];
+        uint16_t port = (uint16_t)atoi(argv[3]);
+        if(!uxr_init_udp_transport(&udp, &udp_platform, ip, port))
+        {
+            printf("%sCan not create an udp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
+            return 1;
+        }
+        comm = &udp.comm;
+        printf("UDP mode => ip: %s - port: %hu\n", argv[2], port);
+        args_index = 4;
+    }
+#endif
+#ifdef PROFILE_TCP_TRANSPORT
+    else if(args >= 4 && strcmp(argv[1], "--tcp") == 0)
+    {
+        char* ip = argv[2];
+        uint16_t port = (uint16_t)atoi(argv[3]);
+        if(!uxr_init_tcp_transport(&tcp, &tcp_platform, ip, port))
+        {
+            printf("%sCan not create a tcp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
+            return 1;
+        }
+        comm = &tcp.comm;
+        printf("<< TCP mode => ip: %s - port: %hu >>\n", argv[2], port);
+        args_index = 4;
+    }
+#endif
     else
     {
         print_help();
@@ -250,18 +267,23 @@ int client_main(int args, char *argv[])
         }
     }
 
-    if(&udp.comm == comm)
+    if(&serial.comm == comm)
+    {
+        uxr_close_serial_transport(&serial);
+    }
+#ifdef PROFILE_UDP_TRANSPORT
+    else if(&udp.comm == comm)
     {
         uxr_close_udp_transport(&udp);
     }
+#endif
+#ifdef PROFILE_TCP_TRANSPORT
     else if(&tcp.comm == comm)
     {
         uxr_close_tcp_transport(&tcp);
     }
-    else if(&serial.comm == comm)
-    {
-        uxr_close_serial_transport(&serial);
-    }
+#endif
+    else 
 
     return 0;
 }
