@@ -29,8 +29,8 @@ set(external_project_cxxflags
 
 include(ExternalProject)
 
-set(microros_src_dir   ${CMAKE_CURRENT_SOURCE_DIR}/../../microros_extensions)
-set(microros_build_dir ${CMAKE_CURRENT_BINARY_DIR}/microros_extensions)
+set(microxrceclient_src_dir   ${CMAKE_CURRENT_SOURCE_DIR}/../Micro-XRCE-DDS-Client)
+set(microxrceclient_build_dir ${CMAKE_CURRENT_BINARY_DIR}/microxrceclient_extensions)
 
 if(CMAKE_GENERATOR STREQUAL "Unix Makefiles")
 set(submake "$(MAKE)")
@@ -39,40 +39,27 @@ set(submake "make")
 endif()
 
 ExternalProject_Add(
-    microroslib_project                 # Name for custom target
-    PREFIX     ${microros_build_dir}    # Root dir for entire project
-    SOURCE_DIR ${microros_src_dir}
-    BINARY_DIR ${microros_src_dir}      # This particular build system is invoked from the root
-    CONFIGURE_COMMAND ""                # Skip configuring the project, e.g. with autoconf
-    BUILD_COMMAND
-        ${submake}
-            PREFIX=${microros_src_dir}
-            CC=${CMAKE_C_COMPILER}
-            AR=${CMAKE_AR}
-            CFLAGS=${external_project_cflags}
-            CXX=${CMAKE_CXX_COMPILER}
-            CXXFLAGS=${external_project_cxxflags}
-            APP_META=$ENV{UROS_APP_FOLDER}/app-colcon.meta
-
-    INSTALL_COMMAND ""      # This particular build system has no install command
-    BUILD_BYPRODUCTS ${MICROROS_LIB_DIR}/libmicroros.a
+    libmicroxrceclient_project
+    PREFIX      ${microxrceclient_build_dir}
+    SOURCE_DIR  ${microxrceclient_src_dir}
+    INSTALL_DIR ${microxrceclient_build_dir}/temp_install
+    CMAKE_CACHE_ARGS  
+        -DCMAKE_INSTALL_PREFIX:PATH=${microxrceclient_build_dir}
+        -DUCLIENT_PROFILE_TCP=OFF
+        -DUCLIENT_PROFILE_SERIAL=OFF
     )
 
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../mcu_ws/install)
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../../../mcu_ws/install/include)
+file (MAKE_DIRECTORY ${microxrceclient_build_dir}/include)
+add_library (libmicroxrceclient STATIC IMPORTED GLOBAL)
+set_target_properties (libmicroxrceclient PROPERTIES
+  IMPORTED_LOCATION ${microxrceclient_build_dir}/lib/libserial.a
+  INTERFACE_INCLUDE_DIRECTORIES ${microxrceclient_build_dir}/include)
+add_dependencies(libmicroxrceclient libmicroxrceclient_project)
 
-set(MICROROS_LIB_DIR     ${CMAKE_CURRENT_SOURCE_DIR}/../../../mcu_ws/install)
-set(MICROROS_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../mcu_ws/install/include)
+# zephyr_interface_library_named(microxrceclient)
+# zephyr_library_import(libmicroxrceclient ${microxrceclient_build_dir}/lib/libmicroros.a)
+# add_dependencies(microxrceclient libmicroxrceclient)
+# add_dependencies(microxrceclient libmicroxrceclient_project)
+# target_include_directories(microxrceclient INTERFACE ${microxrceclient_build_dir}/include)
 
-add_library(microroslib STATIC IMPORTED GLOBAL)
-add_dependencies(
-    microroslib
-    microroslib_project
-    )
-
-add_dependencies(microroslib_project offsets_h)
-
-set_target_properties(microroslib PROPERTIES IMPORTED_LOCATION             ${MICROROS_LIB_DIR}/libmicroros.a)
-set_target_properties(microroslib PROPERTIES INTERFACE_INCLUDE_DIRECTORIES ${MICROROS_INCLUDE_DIR})
-
-target_link_libraries(app PUBLIC microroslib)
+target_link_libraries(app PUBLIC libmicroxrceclient)
