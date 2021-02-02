@@ -29,7 +29,6 @@ typedef struct {
     struct device *uart_dev;
 } zephyr_transport_params_t;
 
-#define MICRO_ROS_FRAMING_REQUIRED true
 static zephyr_transport_params_t default_params;
 
 bool zephyr_transport_open(struct uxrCustomTransport * transport);

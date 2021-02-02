@@ -6,9 +6,10 @@
 #include <uxr/client/client.h>
 #include <ucdr/microcdr.h>
 
-#include <stdio.h> //printf
-#include <string.h> //strcmp
-#include <stdlib.h> //atoi
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <time.h>
 
 #define STREAM_HISTORY  8
 #define BUFFER_SIZE     UCLIENT_CUSTOM_TRANSPORT_MTU * STREAM_HISTORY
@@ -23,7 +24,7 @@ void main(void)
                                         zephyr_transport_write,
                                         zephyr_transport_read);
     // Transport
-    if(!uxr_init_custom_transport(&transport, NULL))
+    if(!uxr_init_custom_transport(&transport, &default_params))
     {
         printf("Error at create transport.\n");
         while(1){};
