@@ -1,6 +1,7 @@
 #include <zephyr.h>
 
 #include "HelloWorld.h"
+#include "microxrce_transports.h"
 
 #include <uxr/client/client.h>
 #include <ucdr/microcdr.h>
@@ -10,20 +11,22 @@
 #include <stdlib.h> //atoi
 
 #define STREAM_HISTORY  8
-#define BUFFER_SIZE     UXR_CONFIG_UDP_TRANSPORT_MTU * STREAM_HISTORY
+#define BUFFER_SIZE     UCLIENT_CUSTOM_TRANSPORT_MTU * STREAM_HISTORY
 
 void main(void)
 {	
-    char* ip = "hola";
-    char* port = "8888";
-
+    uxrCustomTransport transport;
+    uxr_set_custom_transport_callbacks(&transport,
+                                        true,
+                                        zephyr_transport_open,
+                                        zephyr_transport_close,
+                                        zephyr_transport_write,
+                                        zephyr_transport_read);
     // Transport
-    uxrUDPTransport transport;
-    uxrUDPPlatform udp_platform;
-    if(!uxr_init_udp_transport(&transport, &udp_platform, UXR_IPv4, ip, port))
+    if(!uxr_init_custom_transport(&transport, NULL))
     {
         printf("Error at create transport.\n");
-        return 1;
+        while(1){};
     }
 
     // Session
@@ -32,7 +35,7 @@ void main(void)
     if(!uxr_create_session(&session))
     {
         printf("Error at create session.\n");
-        return 1;
+        while(1){};
     }
 
     // Streams
@@ -84,7 +87,7 @@ void main(void)
     if(!uxr_run_session_until_all_status(&session, 1000, requests, status, 4))
     {
         printf("Error at create entities: participant: %i topic: %i publisher: %i darawriter: %i\n", status[0], status[1], status[2], status[3]);
-        return 1;
+        while(1){};
     }
 
     // Write topics
@@ -105,7 +108,7 @@ void main(void)
 
     // Delete resources
     uxr_delete_session(&session);
-    uxr_close_udp_transport(&transport);
+    uxr_close_custom_transport(&transport);
 
-    return 0;
+    while(1){};
 }

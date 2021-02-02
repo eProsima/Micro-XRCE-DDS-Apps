@@ -1,0 +1,63 @@
+menuconfig MICROXRCEDDSCLIENT
+    bool
+	default y
+    prompt "Micro XRCE-DDS Client Support"
+    select APP_LINK_WITH_MICROXRCEDDSCLIENT
+    help
+        Enables Micro XRCE-DDS Client library
+
+if MICROXRCEDDSCLIENT
+    config APP_LINK_WITH_MICROXRCEDDSCLIENT
+        bool "Link 'app' with MICROXRCEDDSCLIENT"
+        default n
+        help
+            Add MICROXRCEDDSCLIENT header files to the 'app' include path. 
+   
+    # choice
+    #     prompt "micro-ROS transport"
+        
+    #     config MICROXRCEDDSCLIENT_TRANSPORT_SERIAL
+    #         bool "micro-ROS serial transport"
+        
+    #     config MICROXRCEDDSCLIENT_TRANSPORT_SERIAL_USB
+    #         bool "micro-ROS USB serial transport"
+        
+    #     config MICROXRCEDDSCLIENT_TRANSPORT_UDP
+    #         bool "micro-ROS UDP network transport"
+        
+    # endchoice
+
+    # config MICROXRCEDDSCLIENT_NODES
+    #     string "available micro-ROS nodes"
+    #     default "1"
+
+    # config MICROXRCEDDSCLIENT_PUBLISHERS
+    #     string "available micro-ROS publishers"
+    #     default "1"
+    
+    # config MICROXRCEDDSCLIENT_SUBSCRIBERS
+    #     string "available micro-ROS subscribers"
+    #     default "1"
+
+    # config MICROXRCEDDSCLIENT_CLIENTS
+    #     string "available micro-ROS service clients"
+    #     default "1"
+
+    # config MICROXRCEDDSCLIENT_SERVERS
+    #     string "available micro-ROS service servers"
+    #     default "1"
+        
+    # config MICROXRCEDDSCLIENT_RMW_HISTORIC
+    #     string "available micro-ROS RMW historic memory"
+    #     default "4"
+    
+    # config MICROXRCEDDSCLIENT_XRCE_DDS_MTU
+    #     string "micro-ROS transport MTU"
+    #     default "512"
+        
+    # config MICROXRCEDDSCLIENT_XRCE_DDS_HISTORIC
+    #     string "micro-ROS middleware memory slots"
+    #     default "4"  
+
+endif
+    

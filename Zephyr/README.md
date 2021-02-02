@@ -19,7 +19,7 @@ Install dependencies and the ARM compiler:
 
 ```bash
 sudo apt update
-apt install -y python3-pip dfu-util wget lsb-release git
+sudo apt install -y python3-pip dfu-util wget lsb-release git ninja-build
 pip3 install west
 
 # Install last version of CMake
@@ -78,7 +78,7 @@ source zephyrproject/zephyr/zephyr-env.sh
 Build the firmware:
 
 ```bash
-west build -b olimex_stm32_e407 -p auto . -- -G'Unix Makefiles' -DCMAKE_VERBOSE_MAKEFILE=ON
+west build -b olimex_stm32_e407 -p auto . 
 ```
 
 Flash the Olimex board using the JTAG adapter:
