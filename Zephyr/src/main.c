@@ -1,55 +1,115 @@
 #include <zephyr.h>
-#include <device.h>
-#include <drivers/sensor.h>
-#include <drivers/gpio.h>
-#include <drivers/led_strip.h>
-#include <drivers/spi.h>
+
+#include "HelloWorld.h"
+#include "microxrce_transports.h"
+
+#include <uxr/client/client.h>
+#include <ucdr/microcdr.h>
+
 #include <stdio.h>
-#include <sys/util.h>
 #include <string.h>
-#include <sys/printk.h>
+#include <stdlib.h>
+#include <time.h>
 
-#include <rcl/rcl.h>
-#include <rcl_action/rcl_action.h>
-#include <rcl/error_handling.h>
-#include <std_msgs/msg/int32.h>
-#include <std_msgs/msg/bool.h>
-
-#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){printk("Failed status on line %d: %d. Aborting.\n",__LINE__,(int)temp_rc);}}
-#define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){printk("Failed status on line %d: %d. Continuing.\n",__LINE__,(int)temp_rc);}}
+#define STREAM_HISTORY  8
+#define BUFFER_SIZE     UCLIENT_CUSTOM_TRANSPORT_MTU * STREAM_HISTORY
 
 void main(void)
 {	
-	rcl_init_options_t options = rcl_get_zero_initialized_init_options();
+    uxrCustomTransport transport;
+    uxr_set_custom_transport_callbacks(&transport,
+                                        true,
+                                        zephyr_transport_open,
+                                        zephyr_transport_close,
+                                        zephyr_transport_write,
+                                        zephyr_transport_read);
+    // Transport
+    if(!uxr_init_custom_transport(&transport, &default_params))
+    {
+        printf("Error at create transport.\n");
+        while(1){};
+    }
 
-	RCCHECK(rcl_init_options_init(&options, rcl_get_default_allocator()))
+    // Session
+    uxrSession session;
+    uxr_init_session(&session, &transport.comm, 0xAAAABBBB);
+    if(!uxr_create_session(&session))
+    {
+        printf("Error at create session.\n");
+        while(1){};
+    }
 
-	// Optional RMW configuration 
-	rmw_init_options_t* rmw_options = rcl_init_options_get_rmw_init_options(&options);
-	RCCHECK(rmw_uros_options_set_client_key(0xDEADBEEF, rmw_options))
+    // Streams
+    uint8_t output_reliable_stream_buffer[BUFFER_SIZE];
+    uxrStreamId reliable_out = uxr_create_output_reliable_stream(&session, output_reliable_stream_buffer, BUFFER_SIZE, STREAM_HISTORY);
 
-	rcl_context_t context = rcl_get_zero_initialized_context();
-	RCCHECK(rcl_init(0, NULL, &options, &context))
+    uint8_t input_reliable_stream_buffer[BUFFER_SIZE];
+    uxr_create_input_reliable_stream(&session, input_reliable_stream_buffer, BUFFER_SIZE, STREAM_HISTORY);
 
-	rcl_node_options_t node_ops = rcl_node_get_default_options();
+    // Create entities
+    uxrObjectId participant_id = uxr_object_id(0x01, UXR_PARTICIPANT_ID);
+    const char* participant_xml = "<dds>"
+                                      "<participant>"
+                                          "<rtps>"
+                                              "<name>default_xrce_participant</name>"
+                                          "</rtps>"
+                                      "</participant>"
+                                  "</dds>";
+    uint16_t participant_req = uxr_buffer_create_participant_xml(&session, reliable_out, participant_id, 0, participant_xml, UXR_REPLACE);
 
-	rcl_node_t node = rcl_get_zero_initialized_node();
-	RCCHECK(rcl_node_init(&node, "zephyr_int32_publisher", "", &context, &node_ops))
+    uxrObjectId topic_id = uxr_object_id(0x01, UXR_TOPIC_ID);
+    const char* topic_xml = "<dds>"
+                                "<topic>"
+                                    "<name>HelloWorldTopic</name>"
+                                    "<dataType>HelloWorld</dataType>"
+                                "</topic>"
+                            "</dds>";
+    uint16_t topic_req = uxr_buffer_create_topic_xml(&session, reliable_out, topic_id, participant_id, topic_xml, UXR_REPLACE);
 
-	rcl_publisher_options_t publisher_ops = rcl_publisher_get_default_options();
-	rcl_publisher_t publisher = rcl_get_zero_initialized_publisher();
-	RCCHECK(rcl_publisher_init(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "zephyr_int32_publisher", &publisher_ops))
+    uxrObjectId publisher_id = uxr_object_id(0x01, UXR_PUBLISHER_ID);
+    const char* publisher_xml = "";
+    uint16_t publisher_req = uxr_buffer_create_publisher_xml(&session, reliable_out, publisher_id, participant_id, publisher_xml, UXR_REPLACE);
 
-	std_msgs__msg__Int32 msg;
-	msg.data = 0;
-	
-	rcl_ret_t rc;
-	do {
-		rc = rcl_publish(&publisher, (const void*)&msg, NULL);
-		msg.data++;
-		k_sleep(1000);
-	} while (true);
+    uxrObjectId datawriter_id = uxr_object_id(0x01, UXR_DATAWRITER_ID);
+    const char* datawriter_xml = "<dds>"
+                                     "<data_writer>"
+                                         "<topic>"
+                                             "<kind>NO_KEY</kind>"
+                                             "<name>HelloWorldTopic</name>"
+                                             "<dataType>HelloWorld</dataType>"
+                                         "</topic>"
+                                     "</data_writer>"
+                                 "</dds>";
+    uint16_t datawriter_req = uxr_buffer_create_datawriter_xml(&session, reliable_out, datawriter_id, publisher_id, datawriter_xml, UXR_REPLACE);
 
-	RCCHECK(rcl_publisher_fini(&publisher, &node))
-	RCCHECK(rcl_node_fini(&node))
+    // Send create entities message and wait its status
+    uint8_t status[4];
+    uint16_t requests[4] = {participant_req, topic_req, publisher_req, datawriter_req};
+    if(!uxr_run_session_until_all_status(&session, 1000, requests, status, 4))
+    {
+        printf("Error at create entities: participant: %i topic: %i publisher: %i darawriter: %i\n", status[0], status[1], status[2], status[3]);
+        while(1){};
+    }
+
+    // Write topics
+    bool connected = true;
+    uint32_t count = 0;
+    while(connected)
+    {
+        HelloWorld topic = {++count, "Hello DDS world!"};
+
+        ucdrBuffer ub;
+        uint32_t topic_size = HelloWorld_size_of_topic(&topic, 0);
+        uxr_prepare_output_stream(&session, reliable_out, datawriter_id, &ub, topic_size);
+        HelloWorld_serialize_topic(&ub, &topic);
+
+        printf("Send topic: %s, id: %i\n", topic.message, topic.index);
+        connected = uxr_run_session_time(&session, 1000);
+    }
+
+    // Delete resources
+    uxr_delete_session(&session);
+    uxr_close_custom_transport(&transport);
+
+    while(1){};
 }
