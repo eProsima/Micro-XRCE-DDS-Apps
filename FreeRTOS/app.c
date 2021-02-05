@@ -11,7 +11,6 @@
 
 uxrSession session;
 uxrUDPTransport transport;
-uxrUDPPlatform udp_platform;
 
 typedef struct Point32 {
     float x;
@@ -38,7 +37,7 @@ void on_topic(uxrSession* session, uxrObjectId object_id, uint16_t request_id, u
 void appMain(){
 
     // Micro-XRCE-DDS init transport and session
-    if(!uxr_init_udp_transport(&transport, &udp_platform, UXR_IPv4, UXRCEDDS_AGENT_IP, UXRCEDDS_AGENT_PORT)){
+    if(!uxr_init_udp_transport(&transport, UXR_IPv4, UXRCEDDS_AGENT_IP, UXRCEDDS_AGENT_PORT)){
         printf("Error: Init serial transport fail\n");
         vTaskSuspend( NULL );
     }

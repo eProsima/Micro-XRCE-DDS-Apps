@@ -132,8 +132,7 @@ int microxrceclient_6lowpan_main(int argc, char *argv[])
 
     // Transport
     uxrUDPTransport transport;
-    uxrUDPPlatform udp_platform;
-    if(!uxr_init_udp_transport(&transport, &udp_platform, UXR_IPv6,ip, port))
+    if(!uxr_init_udp_transport(&transport, UXR_IPv6, ip, port))
     {
         printf("Error at create transport.\n");
         return 1;
