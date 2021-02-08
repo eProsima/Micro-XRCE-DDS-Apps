@@ -73,11 +73,8 @@ int client_main(int args, char *argv[])
     uxrSession session;
 
     uxrUDPTransport udp;
-    uxrUDPPlatform udp_platform;
     uxrTCPTransport tcp;
-    uxrTCPPlatform tcp_platform;
     uxrSerialTransport serial;
-    uxrSerialPlatform serial_platform;
 
     uxrCommunication* comm = NULL;
 
@@ -87,7 +84,7 @@ int client_main(int args, char *argv[])
     {
         char* ip = argv[2];
         uint16_t port = (uint16_t)atoi(argv[3]);
-        if(!uxr_init_udp_transport(&udp, &udp_platform, ip, port))
+        if(!uxr_init_udp_transport(&udp, ip, port))
         {
             printf("%sCan not create an udp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
             return 1;
@@ -100,7 +97,7 @@ int client_main(int args, char *argv[])
     {
         char* ip = argv[2];
         uint16_t port = (uint16_t)atoi(argv[3]);
-        if(!uxr_init_tcp_transport(&tcp, &tcp_platform, ip, port))
+        if(!uxr_init_tcp_transport(&tcp, ip, port))
         {
             printf("%sCan not create a tcp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
             return 1;
@@ -157,7 +154,7 @@ int client_main(int args, char *argv[])
 
                 if (0 == tcsetattr(fd, TCSANOW, &tty_config))
                 {
-                    if(!uxr_init_serial_transport(&serial, &serial_platform, fd, 0, 1))
+                    if(!uxr_init_serial_transport(&serial, fd, 0, 1))
                     {
                         printf("%sCan not create a serial connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
                         return 1;

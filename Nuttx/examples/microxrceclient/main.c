@@ -78,7 +78,7 @@ int main(int args, char** argv)
     {
         char* ip = argv[2];
         uint16_t port = (uint16_t)atoi(argv[3]);
-        if(!uxr_init_tcp_transport(&tcp, &tcp_platform, ip, port))
+        if(!uxr_init_tcp_transport(&tcp, ip, port))
         {
             printf("%sCan not create a tcp connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
             return 1;
@@ -92,7 +92,7 @@ int main(int args, char** argv)
     {
         char* device = argv[2];
         int fd = open(device, O_RDWR | O_NOCTTY | O_NONBLOCK);
-        if(!uxr_init_serial_transport(&serial, &serial_platform, fd, 0, 1))
+        if(!uxr_init_serial_transport(&serial, fd, 0, 1))
         {
             printf("%sCan not create a serial connection%s\n", RED_CONSOLE_COLOR, RESTORE_COLOR);
             return 1;
