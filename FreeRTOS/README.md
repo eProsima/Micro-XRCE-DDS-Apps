@@ -1,6 +1,6 @@
 # Micro-XRCE-DDS + FreeRTOS + Olimex STM32 E407 Sample app
 
-This folder contains a build system and some extensions to integrate [Micro-XRCE-DSS](https://micro-xrce-dds.readthedocs.io/en/latest/), [FreeRTOS](https://www.freertos.org/) and the [Olimex STM32 E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware) evaluation board.
+This folder contains a build system and some extensions to integrate [Micro-XRCE-DDS](https://micro-xrce-dds.readthedocs.io/en/latest/), [FreeRTOS](https://www.freertos.org/) and the [Olimex STM32 E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware) evaluation board.
 
 
 ## Required hardware
@@ -52,7 +52,7 @@ git submodule init
 git submodule update
 ```
 
-Install STM32CubeMX from ST webpage: [download here](https://www.st.com/en/development-tools/stm32cubemx.html). 
+Install STM32CubeMX from ST webpage: [download here](https://www.st.com/en/development-tools/stm32cubemx.html).
 
 Inside STM32CubeMX load `FreeRTOS/sample_project.ioc` and generate code.
 
@@ -81,11 +81,11 @@ struct timeval {
 In `FreeRTOS/Inc/FreeRTOSConfig.h` add these two lines in the `USER CODE` section (line 45):
 
 ```c
-/* USER CODE BEGIN Includes */   	      
+/* USER CODE BEGIN Includes */
 /* Section where include file can be added */
 #define configUSE_POSIX_ERRNO 1
 #define INCLUDE_xTaskGetHandle 1
-/* USER CODE END Includes */ 
+/* USER CODE END Includes */
 ```
 
 

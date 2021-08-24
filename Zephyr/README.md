@@ -1,6 +1,6 @@
 # Micro XRCE-DDS + Zephyr + Olimex STM32 E407 Sample app
 
-This folder contains a build system and some extensions to integrate [Micro XRCE-DSS](https://micro-xrce-dds.readthedocs.io/en/latest/), [Zephyr](https://www.zephyrproject.org/) and the [Olimex STM32 E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware) evaluation board.
+This folder contains a build system and some extensions to integrate [Micro XRCE-DDS](https://micro-xrce-dds.readthedocs.io/en/latest/), [Zephyr](https://www.zephyrproject.org/) and the [Olimex STM32 E407](https://www.olimex.com/Products/ARM/ST/STM32-E407/open-source-hardware) evaluation board.
 
 
 ## Required hardware
@@ -78,7 +78,7 @@ source zephyrproject/zephyr/zephyr-env.sh
 Build the firmware:
 
 ```bash
-west build -b olimex_stm32_e407 -p auto . 
+west build -b olimex_stm32_e407 -p auto .
 ```
 
 Flash the Olimex board using the JTAG adapter:
