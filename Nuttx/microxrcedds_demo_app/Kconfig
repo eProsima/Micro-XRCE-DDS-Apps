@@ -1,0 +1,12 @@
+#
+# For a description of the syntax of this configuration file,
+# see the file kconfig-language.txt in the NuttX tools repository.
+#
+
+config MICRO_XRCE_CLIENT_DEMO_APP
+	tristate "Micro XRCE-DDS example"
+	default n
+	depends on MICRO_XRCE_CLIENT
+	---help---
+		Enable the Micro XRCE-DDS example
+

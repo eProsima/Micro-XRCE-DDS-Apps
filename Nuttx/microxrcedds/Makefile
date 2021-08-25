@@ -2,16 +2,21 @@
 -include $(TOPDIR)/Make.defs
 include $(APPDIR)/Make.defs
 
+CONFIG_UXR_BRANCH = develop
+
 MICRO_XRCE_DIR = $(APPDIR)/microxrcedds/Micro-XRCE-DDS-Client
 MICRO_XRCE_INSTALL_DIR = $(MICRO_XRCE_DIR)/build/install
 
 ifeq ($(CONFIG_WINDOWS_NATIVE),y)
   BIN = ..\libapps$(LIBEXT)
+  INC = ..\include
 else
 ifeq ($(WINTOOL),y)
   BIN = ..\\libapps$(LIBEXT)
+  INC = ..\\include
 else
   BIN = ../libapps$(LIBEXT)
+  INC = ../include
 endif
 endif
 
@@ -89,29 +94,32 @@ all: .built
   .PHONY: clean depend distclean preconfig
   .PRECIOUS: ../../libapps$(LIBEXT)
 
-.built: cmakecompile 
+.built: cmakecompile
+
+
+cmakecompile: $(MICRO_XRCE_DIR) $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a
+	@echo "Installing Micro-XRCE-DDS"
 	$(call DELDIR, $(MICRO_XRCE_DIR)/build/extracted)
 	$(Q) mkdir $(MICRO_XRCE_DIR)/build/extracted
 	$(Q) cd $(MICRO_XRCE_DIR)/build/extracted; \
 		$(ARCROSSDEV)ar -x $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a; \
 		$(ARCROSSDEV)ar -x $(MICRO_XRCE_INSTALL_DIR)/lib/libmicrocdr.a;
 	$(Q) $(AR) $(BIN) $(MICRO_XRCE_DIR)/build/extracted/*.obj
+	$(Q) cp -R $(MICRO_XRCE_INSTALL_DIR)/include/* $(APPDIR)/include
 	$(Q) touch .built
-
-cmakecompile: $(MICRO_XRCE_DIR) $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a
 
 $(MICRO_XRCE_DIR):
 	@echo "Cloning eProsima/Micro-XRCE-DDS-Client"
-	$(Q) git clone -c remote.origin.fetch='+refs/pull/*:refs/remotes/origin/pull/*' --recursive https://github.com/eProsima/Micro-XRCE-DDS-Client && \
+	$(Q) git clone https://github.com/eProsima/Micro-XRCE-DDS-Client && \
 		cd Micro-XRCE-DDS-Client && \
 		git fetch && \
-		git checkout $(CONFIG_UXR_BRANCH) 
+		git checkout $(CONFIG_UXR_BRANCH)
 
 $(MICRO_XRCE_INSTALL_DIR)/lib/libmicroxrcedds_client.a: $(MICRO_XRCE_DIR)/build/CMakeCache.txt
 	$(Q) cd $(MICRO_XRCE_DIR)/build; \
 		 make && make install
 
-$(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
+$(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(MICRO_XRCE_DIR) $(TOPDIR)/.config
 	$(Q) echo 'PROFILE_CREATE_ENTITIES_REF=$(PROFILE_CREATE_ENTITIES_REF)' > $(MICRO_XRCE_DIR)/client.config; \
          echo 'PROFILE_CREATE_ENTITIES_XML=$(PROFILE_CREATE_ENTITIES_XML)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'PROFILE_WRITE_ACCESS=TRUE' >> $(MICRO_XRCE_DIR)/client.config; \
@@ -130,7 +138,7 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
          echo 'CONFIG_MAX_SESSION_CONNECTION_ATTEMPTS=$(CONFIG_UXR_MAX_SESSION_CONNECTION_ATTEMPTS)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_MIN_SESSION_CONNECTION_INTERVAL=$(CONFIG_UXR_MIN_SESSION_CONNECTION_INTERVAL)' >> $(MICRO_XRCE_DIR)/client.config; \
          echo 'CONFIG_MIN_HEARTBEAT_TIME_INTERVAL=$(CONFIG_UXR_MIN_HEARTBEAT_TIME_INTERVAL)' >> $(MICRO_XRCE_DIR)/client.config; \
-         echo 'CONFIG_SERIALIZATION_ENDIANNESS=$(CONFIG_SERIALIZATION_ENDIANNESS)' >> $(MICRO_XRCE_DIR)/client.config
+         echo 'CONFIG_SERIALIZATION_ENDIANNESS=$(CONFIG_SERIALIZATION_ENDIANNESS)' >> $(MICRO_XRCE_DIR)/client.config; \
 		 echo 'UCLIENT_ISOLATED_INSTALL=OFF' >> $(MICRO_XRCE_DIR)/client.config
 	$(Q) mkdir -p $(MICRO_XRCE_DIR)/toolchains/build
 	$(Q) cd $(MICRO_XRCE_DIR)/toolchains/build; \
@@ -144,21 +152,24 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(TOPDIR)/.config
 			-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 			-DUCLIENT_VERBOSE_SERIALIZATION=$(VERBOSE_OPT) \
 			-DUCLIENT_VERBOSE_MESSAGE=$(VERBOSE_OPT) \
-			-DCHECK_ENDIANNESS=OFF \
 			-DCMAKE_INSTALL_PREFIX=$(MICRO_XRCE_INSTALL_DIR) ..; \
 
-install: 
+install:
 	$(Q) cd $(MICRO_XRCE_DIR)/build/; \
 		 make install
 
-context: cmakecompile 
+context: cmakecompile
 
 .depend:
 
 depend: .depend
 
+register:
+
 clean:
 	$(call DELDIR, $(MICRO_XRCE_DIR)/build)
+	$(call DELDIR, $(APPDIR)/include/uxr)
+	$(call DELDIR, $(APPDIR)/include/ucdr)
 	$(call DELFILE, $(MICRO_XRCE_DIR)/.built)
 
 distclean: clean
@@ -167,3 +178,4 @@ distclean: clean
 preconfig:
 
 -include Make.dep
+
