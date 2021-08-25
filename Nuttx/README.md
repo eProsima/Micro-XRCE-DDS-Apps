@@ -1,4 +1,4 @@
-# Micro-XRCE-DDS + Nuttx + Olimex STM32 E407 Sample app
+# Micro-XRCE-DDS + Nuttx + STM32L4 Discovery kit IoT node Sample app
 
 This folder contains a build system and some extensions to integrate [Micro-XRCE-DDS](https://micro-xrce-dds.readthedocs.io/en/latest/), [Nuttx](https://nuttx.apache.org/) and the [STM32L4 Discovery kit IoT node](https://www.st.com/en/evaluation-tools/b-l475e-iot01a.html) evaluation board.
 
@@ -35,6 +35,7 @@ cd nuttx
 ```bash
 kconfig-tweak --enable CONFIG_MICRO_XRCE_CLIENT
 kconfig-tweak --enable CONFIG_MICRO_XRCE_CLIENT_DEMO_APP
+
 kconfig-tweak --enable CONFIG_SERIAL_TERMIOS
 kconfig-tweak --enable CONFIG_STM32L4_UART4
 kconfig-tweak --enable CONFIG_STM32L4_UART4_SERIALDRIVER

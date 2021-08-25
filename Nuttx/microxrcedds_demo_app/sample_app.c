@@ -11,11 +11,20 @@
 #define STREAM_HISTORY  8
 #define BUFFER_SIZE     UXR_CONFIG_UDP_TRANSPORT_MTU* STREAM_HISTORY
 
-int main(int argc, FAR char *argv[])
+int main(int argc, char *argv[])
 {
+    // Open serial port
+    char * device = "/dev/ttyS1";
+    if (argc >= 2){
+        device = argv[1];
+    }
+
+    int fd;
+    fd = open(device, O_RDWR | O_NOCTTY);
+
     // Transport
     uxrUDPTransport transport;
-    if (!uxr_init_udp_transport(&transport, UXR_IPv4, "192.168.1.100", "8888"))
+    if (!uxr_init_serial_transport(&transport, fd, 0, 1))
     {
         printf("Error at create transport.\n");
         return 1;
