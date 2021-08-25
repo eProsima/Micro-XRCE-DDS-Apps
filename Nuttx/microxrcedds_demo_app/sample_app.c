@@ -8,6 +8,10 @@
 #include <string.h> //strcmp
 #include <stdlib.h> //atoi
 
+#include <stdio.h>
+#include <fcntl.h>
+#include <termios.h>
+
 #define STREAM_HISTORY  8
 #define BUFFER_SIZE     UXR_CONFIG_UDP_TRANSPORT_MTU* STREAM_HISTORY
 
