@@ -13,7 +13,7 @@
 #include <termios.h>
 
 #define STREAM_HISTORY  8
-#define BUFFER_SIZE     UXR_CONFIG_UDP_TRANSPORT_MTU* STREAM_HISTORY
+#define BUFFER_SIZE     UXR_CONFIG_SERIAL_TRANSPORT_MTU* STREAM_HISTORY
 
 int main(int argc, char *argv[])
 {
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     fd = open(device, O_RDWR | O_NOCTTY);
 
     // Transport
-    uxrUDPTransport transport;
+    uxrSerialTransport transport;
     if (!uxr_init_serial_transport(&transport, fd, 0, 1))
     {
         printf("Error at create transport.\n");
@@ -112,14 +112,14 @@ int main(int argc, char *argv[])
         uxr_prepare_output_stream(&session, reliable_out, datawriter_id, &ub, 4);
         ucdr_serialize_uint32_t(&ub, count);
 
-        printf("Send topic: %d\n", count);
+        printf("Send topic: %ld\n", count);
         count++;
         connected = uxr_run_session_time(&session, 1000);
     }
 
     // Delete resources
     uxr_delete_session(&session);
-    uxr_close_udp_transport(&transport);
+    uxr_close_serial_transport(&transport);
 
     return 0;
 }

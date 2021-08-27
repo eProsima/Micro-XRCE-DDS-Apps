@@ -37,7 +37,7 @@ include $(APPDIR)/Make.defs
 
 PROGNAME  = microxrcedds_demo_app
 PRIORITY  = 100
-STACKSIZE = $(DEFAULT_TASK_STACKSIZE)
+STACKSIZE = 4000
 MODULE    = $(CONFIG_MICRO_XRCE_CLIENT_DEMO_APP)
 
 MAINSRC = sample_app.c

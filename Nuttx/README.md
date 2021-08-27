@@ -55,7 +55,9 @@ make -j$(nproc)
 ```bash
 openocd -f interface/stlink-v2-1.cfg -f target/stm32l4x.cfg -c init -c "reset halt" -c "flash write_image erase nuttx.bin 0x08000000" -c "reset" -c "exit"
 ```
-7. Connect UART4 (the one in the Arduino header D0 and D1) to your Micro XRCE-DDS Agent.
+7. Connect UART4 RX to your Micro XRCE-DDS Agent, on the Arduino header (CN3):
+  - UART4 RX: D0
+  - UART4 TX: D1 
 8. You can run the Micro XRCE-DDS example by launching `microxrcedds_demo_app /dev/ttyS1` in NSH console. First argument is the serial port used for client to agent communication:
 ```
 NuttShell (NSH) NuttX-10.1.0-RC1
