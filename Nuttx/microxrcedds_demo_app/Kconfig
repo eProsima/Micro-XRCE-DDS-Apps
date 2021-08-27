@@ -10,3 +10,10 @@ config MICRO_XRCE_CLIENT_DEMO_APP
 	---help---
 		Enable the Micro XRCE-DDS example
 
+if MICRO_XRCE_CLIENT_DEMO_APP
+
+config CONFIG_MICRO_XRCE_APP_STACKSIZE
+	int "Micro XRCE demo stack size"
+	default 4000
+
+endif

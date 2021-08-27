@@ -46,6 +46,8 @@ kconfig-tweak --set-val CONFIG_UART4_BAUD 115200
 kconfig-tweak --set-val CONFIG_UART4_BITS 8
 kconfig-tweak --set-val CONFIG_UART4_PARITY 0
 kconfig-tweak --set-val CONFIG_UART4_2STOP 0
+
+kconfig-tweak --set-val CONFIG_MICRO_XRCE_APP_STACKSIZE 4000
 ```
 5. Build Nuttx:
 ```bash
