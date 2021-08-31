@@ -4,7 +4,7 @@ menu "Micro XRCE-DDS"
 
 config MICRO_XRCE_CLIENT
     bool "Enable Micro XRCE-DDS Client"
-    default n
+    default y
     ---help---
         Enable support for Micro XRCE-DDS Client
 
@@ -18,6 +18,19 @@ config UXR_BRANCH
         ---help---
             Select branch to clone al build.
 
+config UXR_SHARED_MEMORY
+        bool "Enable shared memory transport support"
+        default n
+        ---help---
+            Enable shared memory transport support.
+
+config UXR_SHARED_MEMORY_MAX_ENTITIES
+        int "Max number of entities involved in shared memory."
+        default 4
+        depends on UXR_SHARED_MEMORY
+        ---help---
+            Max number of entities involved in shared memory..
+
 config UXR_PROFILE_CREATE_ENTITIES_REF
         bool "Create Entities by Reference profile"
         default y
@@ -30,33 +43,18 @@ config UXR_PROFILE_CREATE_ENTITIES_XML
         ---help---
             Enable the Create Entities by XML profile.
 
-config UXR_PROFILE_READ_ACCESS
-        bool "Read Access profile"
-        default y
-        ---help---
-            Enable Read Acces profile.
-
 config UXR_PROFILE_SERIAL_TRANSPORT 
         bool "Serial Transport profile"
         default y
         ---help---
             Enable the Serial Transport profile.
 
-config UXR_PROFILE_DISCOVERY
-        bool "Discovery profile"
-        default y
-        ---help---
-            Enable the Discovery profile.
-
-if UXR_PROFILE_SERIAL_TRANSPORT
-
 config UXR_SERIAL_TRANSPORT_MTU
         int "Serial Transport MTU"
         default 64
+        depends on UXR_PROFILE_SERIAL_TRANSPORT
         ---help---
             Serial Transport MTU.
-
-endif # UXR_PROFILE_SERIAL_TRANSPORT
 
 config UXR_PROFILE_UDP_TRANSPORT 
         bool "UDP Transport profile"
@@ -65,15 +63,12 @@ config UXR_PROFILE_UDP_TRANSPORT
         ---help---
             Enable the UDP Transport profile.
 
-if UXR_PROFILE_UDP_TRANSPORT
-
 config UXR_UDP_TRANSPORT_MTU
         int "UDP Transport MTU"
         default 64 
+        depends on UXR_PROFILE_UDP_TRANSPORT
         ---help---
             UDP Transport MTU.
-
-endif # UXR_PROFILE_UDP_TRANSPORT
 
 config UXR_PROFILE_TCP_TRANSPORT 
         bool "TCP Transport profile"
@@ -82,15 +77,19 @@ config UXR_PROFILE_TCP_TRANSPORT
         ---help---
             Enable the TCP Transport profile.
 
-if UXR_PROFILE_TCP_TRANSPORT
-
 config UXR_TCP_TRANSPORT_MTU
         int "TCP Transport MTU"
         default 64 
+        depends on UXR_PROFILE_TCP_TRANSPORT
         ---help---
             TCP Transport MTU.
 
-endif # UXR_PROFILE_TCP_TRANSPORT
+config UXR_PROFILE_DISCOVERY
+        bool "Discovery profile"
+        default y
+        depends on UXR_PROFILE_UDP_TRANSPORT || UXR_PROFILE_TCP_TRANSPORT
+        ---help---
+            Enable the Discovery profile.
 
 config UXR_MAX_OUTPUT_BEST_EFFORT_STREAMS 
         int "Output Best-Effort streams"
@@ -131,6 +130,12 @@ config UXR_MIN_SESSION_CONNECTION_INTERVAL
 config UXR_MIN_HEARTBEAT_TIME_INTERVAL
         int "Minimum heartbeat time intermal (ms)"
         default 1
+        ---help---
+            Minimum heartbeat time internal in milliseconds.
+
+config ENDIAN_BIG
+        bool "Set the machine endianness to big endianness (by default is little endianness)."
+        default n
         ---help---
             Minimum heartbeat time internal in milliseconds.
 
