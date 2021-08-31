@@ -5,7 +5,7 @@
 
 config MICRO_XRCE_CLIENT_DEMO_APP
 	tristate "Micro XRCE-DDS example"
-	default n
+	default y
 	depends on MICRO_XRCE_CLIENT
 	---help---
 		Enable the Micro XRCE-DDS example

@@ -4,7 +4,7 @@ menu "Micro XRCE-DDS"
 
 config MICRO_XRCE_CLIENT
     bool "Enable Micro XRCE-DDS Client"
-    default n
+    default y
     ---help---
         Enable support for Micro XRCE-DDS Client
 
@@ -49,12 +49,6 @@ config UXR_PROFILE_SERIAL_TRANSPORT
         ---help---
             Enable the Serial Transport profile.
 
-config UXR_PROFILE_DISCOVERY
-        bool "Discovery profile"
-        default y
-        ---help---
-            Enable the Discovery profile.
-
 config UXR_SERIAL_TRANSPORT_MTU
         int "Serial Transport MTU"
         default 64
@@ -89,6 +83,13 @@ config UXR_TCP_TRANSPORT_MTU
         depends on UXR_PROFILE_TCP_TRANSPORT
         ---help---
             TCP Transport MTU.
+
+config UXR_PROFILE_DISCOVERY
+        bool "Discovery profile"
+        default y
+        depends on UXR_PROFILE_UDP_TRANSPORT || UXR_PROFILE_TCP_TRANSPORT
+        ---help---
+            Enable the Discovery profile.
 
 config UXR_MAX_OUTPUT_BEST_EFFORT_STREAMS 
         int "Output Best-Effort streams"
