@@ -148,6 +148,7 @@ $(MICRO_XRCE_DIR)/build/CMakeCache.txt: $(MICRO_XRCE_DIR) $(TOPDIR)/.config
 	$(Q) mkdir -p $(MICRO_XRCE_DIR)/build
 	$(Q) cd $(MICRO_XRCE_DIR)/build; \
 		 cmake -DCMAKE_TOOLCHAIN_FILE=$(MICRO_XRCE_DIR)/toolchains/build/nuttx_toolchain.cmake \
+		 	-DUCLIENT_BUILD_MICROCDR=ON \
 			-DCMAKE_SYSROOT=$(TOPDIR) \
 			-DCMAKE_BUILD_TYPE=$(BUILD_TYPE) \
 			-DUCLIENT_VERBOSE_SERIALIZATION=$(VERBOSE_OPT) \
