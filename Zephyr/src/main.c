@@ -12,10 +12,10 @@
 #include <time.h>
 
 #define STREAM_HISTORY  8
-#define BUFFER_SIZE     UCLIENT_CUSTOM_TRANSPORT_MTU * STREAM_HISTORY
+#define BUFFER_SIZE     UXR_CONFIG_CUSTOM_TRANSPORT_MTU * STREAM_HISTORY
 
 void main(void)
-{	
+{
     uxrCustomTransport transport;
     uxr_set_custom_transport_callbacks(&transport,
                                         true,
